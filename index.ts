@@ -1,66 +1,102 @@
 // Exercice de gestion d'une bibliothèque 
 // 1ere étape --> SANS POO
 
-// On commence par créer un tableau de livre, chaque livre aura, un titre, un auteur et un statut pour savoir s'il est emprunté ou non.
-const livres = [
-    {titre : "The Prison Healer: La Guérisseuse de Zalindov", auteur:"Lynette Noni", estEmprunte: true},
-    {titre: "The Prison Healer: La Reine Rebelle", auteur:"Lynette Noni", estEmprunte: false},
-    {titre: "Les OS émeraude: La Cité de Jade", auteur: "Fonda Lee", estEmprunte: false},
-];
+// On modifie se tableau en une classe Livre avec des propriétes:
+class Livre {
+    titre: string;
+    auteur: string;
+    estEmprunte: boolean;
 
-// Function pour afficher les livres 
-function afficherLivres(){
-    console.log("Voici la liste des livres:");
-    livres.forEach((livre, index) => {
-        console.log(
-            `${index +1}.${livre.titre} par ${livre.auteur} - ${livre.estEmprunte ? "Emprunté" : "Disponible"}`
-        );
-    });
-}
-
-// fonction pour emprunter un livre par son index
-function emprunterUnLivre(numeroLivre:number){
-    const index = numeroLivre - 1;
-    if (livres[index]){
-        if (!livres[index].estEmprunte){
-            livres[index].estEmprunte = true;
-            console.log(`Vous avez emprunté: ${livres[index].titre}`);
+    constructor(titre: string, auteur: string, estEmprunte: boolean = false){
+        this.titre = titre;
+        this.auteur = auteur;
+        this.estEmprunte = estEmprunte;
+    }
+    
+    
+    // fonction pour emprunter un livre 
+    emprunter(){
+        if (!this.estEmprunte){
+            this.estEmprunte = true;
+            console.log(`Vous avez emprunté le livre: ${this.titre}.`);
         } else {
-            console.log(`Le livre: ${livres[index].titre} n'est pas disponible`)
+            console.log(`Le livre ${this.titre} n'est pas disponible.`)
         }
-    } else {
-        console.log("Livre non trouvé. Veuillez vérifier le numéro.")
+    }
+
+    // fonction pour retourner un livre 
+    retourner(){
+        if(this.estEmprunte){
+            this.estEmprunte = false; 
+            console.log(`Merci d'avoir retouné le livre: ${this.titre}.`);
+        }else{
+            console.log(`Le livre: ${this.titre} n'était pas emprunté.`);
+        }
+    }
+
+    // Function pour afficher les livres 
+    afficher(){
+        console.log(`${this.titre}, par ${this.auteur}, - ${this.estEmprunte ? "Emprunté" : "Disponible"}`);
     }
 }
 
-// fonction pour retourner un livre 
-function retourLivre(numeroLivre :number){
-    const index = numeroLivre - 1 ;
-    if(livres[index]){
-        if(livres[index].estEmprunte){
-            livres[index].estEmprunte = false;
-            console.log(`Vous avez retourné le livre: ${livres[index].titre}. Merci!`);
-        } else {
-            console.log("Ce livre n'a pas quitté la bibliothèque");
-        }
-    } else {
-        console.log("Ce livre est introuvable.  Veuillez vérifier le numéro.")
+// Création de la Bibliothèque 
+class Bibliothèque{
+    livres: Livre[];
+
+    constructor(){
+        this.livres = [];
     }
+
+    // Ajouter un livre dans la bibilothèque 
+    ajouterLivre(livre : Livre){
+        this.livres.push(livre)
+    }
+
+    // Afficher les livres de la bibliothèque
+    afficherLivresBiblio(){
+        console.log("Voici la liste des livres:")
+        this.livres.forEach((livre, index) => {
+        console.log(`${index + 1}`);
+        livre.afficher();
+        })
+    }
+
+    emprunterLivre(numeroLivre : number){
+        const index = numeroLivre - 1;
+        if (this.livres[index]){
+            this.livres[index].emprunter()
+        } else {
+            console.log("Livre introuvable.");
+        }
+    } 
+
+    retourlivre(numeroLivre: number){
+        const index = numeroLivre - 1;
+        if (this.livres[index]){
+            this.livres[index].retourner();
+        } else {
+            console.log("Livre introuvable.");
+        } 
+    }
+
 }
 
-
+// Ajout des Livres et création de la biblio
+const maBibliotheque = new Bibliothèque();
+maBibliotheque.ajouterLivre(new Livre("The Prison Healer: La Guerisseuse de Zalindov", "Lynette Noni", true));
+maBibliotheque.ajouterLivre(new Livre("The Prison Healer: La Reine Rebelle", "Lynette Noni"));
+maBibliotheque.ajouterLivre(new Livre("Les Os émeraude: La cité de Jade", "Fonda Lee"));
 
 
 // Test des fonctions
-afficherLivres();
+maBibliotheque.afficherLivresBiblio()
+
 console.log("\n--- Emprunt d'un livre ---");
-emprunterUnLivre(2); 
-afficherLivres();
+maBibliotheque.emprunterLivre(2);
+maBibliotheque.afficherLivresBiblio();
 
 console.log("\n--- Retour d'un livre ---");
-retourLivre(1); 
-afficherLivres();
-
-
-
+maBibliotheque.retourlivre(1);
+maBibliotheque.afficherLivresBiblio();
 
