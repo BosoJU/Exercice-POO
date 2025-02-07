@@ -35,8 +35,8 @@ class Livre {
     }
 
     // Function pour afficher les livres 
-    afficher(){
-        console.log(`${this.titre}, par ${this.auteur}, - ${this.estEmprunte ? "Emprunté" : "Disponible"}`);
+    afficher(index : number){
+        console.log(`${index + 1}. ${this.titre}, par ${this.auteur}, - ${this.estEmprunte ? "Emprunté" : "Disponible"}`);
     }
 }
 
@@ -57,8 +57,7 @@ class Bibliothèque{
     afficherLivresBiblio(){
         console.log("Voici la liste des livres:")
         this.livres.forEach((livre, index) => {
-        console.log(`${index + 1}`);
-        livre.afficher();
+        livre.afficher(index);
         })
     }
 
